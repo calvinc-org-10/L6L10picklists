@@ -1,9 +1,14 @@
-import calvincTools
 from PySide6.QtWidgets import QPushButton, QVBoxLayout
 from models import picklist, L6L10Parts
-from database import Session
+from database import get_app_sessionmaker
 
-class editPicklist(calvincTools.cSimpleRecordForm):
+from calvincTools.utils import (
+    cSimpleTableForm, 
+    cSimpleRecordForm, 
+    cSimpleRecordSubForm1, cSimpleRecordSubForm2,
+    )
+
+class editPicklist(cSimpleRecordForm):
     """
     Form to edit picklist records. Inherits from calvincTools.cSimpleRecordForm.
     Includes a button/mechanism to restrict view to ActivePicklist.
@@ -43,10 +48,15 @@ class editPicklist(calvincTools.cSimpleRecordForm):
             elif hasattr(self, 'set_filter'):
                 self.set_filter(None)
 
-class editL6L10Parts(calvincTools.cSimpleRecordForm):
+class editL6L10Parts(cSimpleTableForm):
     """
-    Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleRecordForm.
+    Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleTableForm.
     """
     def __init__(self, parent=None):
         # Initialize with the L6L10Parts model
-        super().__init__(model=L6L10Parts, parent=parent)
+        super().__init__(
+            formname='L6 to L10 Parts', 
+            tbl=L6L10Parts, 
+            ssnmaker=get_app_sessionmaker(),
+            parent=parent
+            )
