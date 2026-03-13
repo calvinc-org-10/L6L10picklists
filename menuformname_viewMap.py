@@ -45,7 +45,7 @@ FormNameToURL_Map['frmRandCountScheduler'.lower()] = (None, None)
 # FormNameToURL_Map['LocationList'.lower()] = ('LocationList', None)
 # FormNameToURL_Map['sap'.lower()] = ('showtable-SAP', None)
 # FormNameToURL_Map['tblActualCounts'.lower()] = ('ActualCountList', None)
-FormNameToURL_Map['L6L10Parts'.lower()] = ('PartTypeForm', editL6L10Parts)
+FormNameToURL_Map['L6L10Parts'.lower()] = (None, editL6L10Parts)
 
 
 # FormNameToURL_Map['test01'.lower()] = ('', _newcode.UploadSAPSOHSprsht)
