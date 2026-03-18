@@ -3,7 +3,7 @@ from models import picklist, L6L10Parts
 from database import get_app_sessionmaker
 
 from calvincTools.utils import (
-    cSimpleTableForm, 
+    cSimpleMultiRecordSubFmWrapperForm,
     cSimpleRecordForm, 
     cSimpleRecordSubForm1, cSimpleRecordSubForm2,
     )
@@ -48,7 +48,7 @@ class editPicklist(cSimpleRecordForm):
             elif hasattr(self, 'set_filter'):
                 self.set_filter(None)
 
-class editL6L10Parts(cSimpleTableForm):
+class editL6L10PartsSub(cSimpleRecordSubForm1):
     """
     Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleTableForm.
     """
@@ -60,3 +60,19 @@ class editL6L10Parts(cSimpleTableForm):
             ssnmaker=get_app_sessionmaker(),
             parent=parent
             )
+class editL6L10PartsMain(cSimpleMultiRecordSubFmWrapperForm):
+    """
+    Main form to edit L6L10Parts records, with subforms for different views.
+    Inherits from calvincTools.cSimpleMultiRecordSubFmWrapperForm.
+    """
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        
+        # Create subforms for different views of L6L10Parts
+        self.subform_all = editL6L10Parts(parent=self)
+        self.subform_active = editL6L10Parts(parent=self)
+        self.subform_active.btn_active_filter.setChecked(True)  # Set to show active by default
+        
+        # Add subforms to the wrapper form
+        self.add_subform(self.subform_all, "All L6L10 Parts")
+        self.add_subform(self.subform_active, "Active L6L10 Parts")
