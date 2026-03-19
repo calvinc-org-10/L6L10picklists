@@ -6,6 +6,7 @@ from calvincTools.utils import (
     cSimpleMultiRecordSubFmWrapperForm,
     cSimpleRecordForm, 
     cSimpleRecordSubForm1, cSimpleRecordSubForm2,
+    get_primary_key_column,
     )
 
 class editPicklist(cSimpleRecordForm):
@@ -52,27 +53,22 @@ class editL6L10PartsSub(cSimpleRecordSubForm1):
     """
     Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleTableForm.
     """
+    _ORMmodel = L6L10Parts
+    _primary_key = get_primary_key_column(L6L10Parts)
+    _ssnmaker = get_app_sessionmaker()
     def __init__(self, parent=None):
-        # Initialize with the L6L10Parts model
-        super().__init__(
-            formname='L6 to L10 Parts', 
-            tbl=L6L10Parts, 
-            ssnmaker=get_app_sessionmaker(),
-            parent=parent
-            )
+        super().__init__(parent=parent)
 class editL6L10PartsMain(cSimpleMultiRecordSubFmWrapperForm):
     """
     Main form to edit L6L10Parts records, with subforms for different views.
     Inherits from calvincTools.cSimpleMultiRecordSubFmWrapperForm.
     """
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
+    _formname = "Edit L6L10Parts"
+    fieldDefs = {
+        'L6L10Parts': {
+            'subform_class': editL6L10PartsSub,
+            'label': 'L6 to L10 Parts',
+            'position': (0, 0),
+        },
+    }
         
-        # Create subforms for different views of L6L10Parts
-        self.subform_all = editL6L10Parts(parent=self)
-        self.subform_active = editL6L10Parts(parent=self)
-        self.subform_active.btn_active_filter.setChecked(True)  # Set to show active by default
-        
-        # Add subforms to the wrapper form
-        self.add_subform(self.subform_all, "All L6L10 Parts")
-        self.add_subform(self.subform_active, "Active L6L10 Parts")
