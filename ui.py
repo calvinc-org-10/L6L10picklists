@@ -58,6 +58,7 @@ class editL6L10PartsSub(cSimpleRecordSubForm1):
     _ssnmaker = get_app_sessionmaker()
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+        self.loadFromRecord(None)
 class editL6L10PartsMain(cSimpleMultiRecordSubFmWrapperForm):
     """
     Main form to edit L6L10Parts records, with subforms for different views.
