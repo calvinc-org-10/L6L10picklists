@@ -36,7 +36,7 @@ def importIMS(filepath):
         sheet = wb.active
         
         # Skipping header row assuming it's the first row
-        for row in sheet.iter_rows(min_row=2, values_only=True):
+        for row in sheet.iter_rows(min_row=2, values_only=True):    # type: ignore
             if not row[0]:
                 continue
             

@@ -3,15 +3,16 @@ from models import picklist, L6L10Parts
 from database import get_app_sessionmaker
 
 from calvincTools.utils import (
-    cSimpleMultiRecordSubFmWrapperForm,
-    cSimpleRecordForm, 
-    cSimpleRecordSubForm1, cSimpleRecordSubForm2,
+    cSRFMultiRecordWrapper,
+    cSRFSingleRecordForm,
+    cSRFRecordGrid, cSRFRecordList,
     get_primary_key_column,
     )
 
-class editPicklist(cSimpleRecordForm):
+class editPicklist(cSRFSingleRecordForm):
+    #### AI generated code - may require adjustments to fit calvincTools API and form layout. Please review and modify as needed. ####
     """
-    Form to edit picklist records. Inherits from calvincTools.cSimpleRecordForm.
+    Form to edit picklist records. Inherits from calvincTools.cSRFSingleRecordForm.
     Includes a button/mechanism to restrict view to ActivePicklist.
     """
     def __init__(self, parent=None):
@@ -24,9 +25,9 @@ class editPicklist(cSimpleRecordForm):
         self.btn_active_filter.toggled.connect(self.on_active_filter_toggled)
         
         # Attempt to add to form layout if one exists; user may need to adjust
-        # depending on the actual layout structure of cSimpleRecordForm
+        # depending on the actual layout structure of cSRFSingleRecordForm
         if self.layout() is not None:
-            self.layout().insertWidget(0, self.btn_active_filter)
+            self.layout().insertWidget(0, self.btn_active_filter)       #type: ignore
         else:
             layout = QVBoxLayout(self)
             layout.addWidget(self.btn_active_filter)
@@ -39,17 +40,17 @@ class editPicklist(cSimpleRecordForm):
         if checked:
             # Show only records where status != 'done'
             if hasattr(self, 'set_filter'):
-                self.set_filter(picklist.status != 'done')
+                self.set_filter(picklist.status != 'done')  # type: ignore
             else:
-                print("calvincTools.cSimpleRecordForm does not have set_filter. Filter not applied.")
+                print("calvincTools.cSRFSingleRecordForm does not have set_filter. Filter not applied.")
         else:
             # Clear the filter
             if hasattr(self, 'clear_filter'):
-                self.clear_filter()
+                self.clear_filter() #type: ignore
             elif hasattr(self, 'set_filter'):
-                self.set_filter(None)
+                self.set_filter(None)   #type: ignore
 
-class editL6L10PartsSub(cSimpleRecordSubForm1):
+class editL6L10PartsSub(cSRFRecordGrid):
     """
     Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleTableForm.
     """
@@ -58,10 +59,10 @@ class editL6L10PartsSub(cSimpleRecordSubForm1):
     _ssnmaker = get_app_sessionmaker()
     def __init__(self, parent=None):
         super().__init__(parent=parent)
-class editL6L10PartsMain(cSimpleMultiRecordSubFmWrapperForm):
+class editL6L10PartsMain(cSRFMultiRecordWrapper):
     """
     Main form to edit L6L10Parts records, with subforms for different views.
-    Inherits from calvincTools.cSimpleMultiRecordSubFmWrapperForm.
+    Inherits from calvincTools.cSRFMultiRecordWrapper.
     """
     _formname = "Edit L6L10Parts"
     fieldDefs = {
