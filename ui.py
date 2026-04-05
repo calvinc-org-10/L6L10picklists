@@ -1,13 +1,19 @@
+from typing import Any
+
 from PySide6.QtWidgets import QPushButton, QVBoxLayout
+
 from models import picklist, L6L10Parts
 from database import get_app_sessionmaker
 
 from calvincTools.utils import (
-    cSRFMultiRecordWrapper,
-    cSRFSingleRecordForm,
-    cSRFRecordGrid, cSRFRecordList,
     get_primary_key_column,
     )
+from calvincTools.utils.forms import (
+    cQFormFieldDef, cQFormBtnDef,
+    cSRFSingleRecordForm,
+    cSRFMultiRecordWrapper,
+    cSRFRecordGrid, cSRFRecordList,
+)
 
 class editPicklist(cSRFSingleRecordForm):
     #### AI generated code - may require adjustments to fit calvincTools API and form layout. Please review and modify as needed. ####
@@ -52,24 +58,32 @@ class editPicklist(cSRFSingleRecordForm):
 
 class editL6L10PartsSub(cSRFRecordGrid):
     """
-    Form to edit L6L10Parts records. Inherits from calvincTools.cSimpleTableForm.
+    Form to edit L6L10Parts records. 
     """
     _ORMmodel = L6L10Parts
     _primary_key = get_primary_key_column(L6L10Parts)
     _ssnmaker = get_app_sessionmaker()
+
     def __init__(self, parent=None):
         super().__init__(parent=parent)
+# editL6L10PartsSub
 class editL6L10PartsMain(cSRFMultiRecordWrapper):
     """
     Main form to edit L6L10Parts records, with subforms for different views.
     Inherits from calvincTools.cSRFMultiRecordWrapper.
     """
     _formname = "Edit L6L10Parts"
-    fieldDefs = {
-        'L6L10Parts': {
-            'subform_class': editL6L10PartsSub,
-            'label': 'L6 to L10 Parts',
-            'position': (0, 0),
-        },
-    }
-        
+
+    def defineFields(self):
+        r = [
+            cQFormFieldDef(name='L6L10Parts',
+                field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
+                widget_type=editL6L10PartsSub,
+                label='L6 to L10 Parts',
+                position=(0, 0),
+            ),
+        ]
+        return r
+    # defineFields
+# editL6L10PartsMain
+            
