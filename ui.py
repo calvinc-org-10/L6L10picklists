@@ -12,10 +12,49 @@ from calvincTools.utils.forms import (
     cQFormFieldDef, cQFormBtnDef,
     cSRFSingleRecordForm,
     cSRFMultiRecordWrapper,
-    cSRFRecordGrid, cSRFRecordList,
+    cSRFRecordGrid, cSRFRecordList, cSRFRecordList_Record,
 )
 
-class editPicklist(cSRFSingleRecordForm):
+
+class picklist_record(cSRFRecordList_Record):
+    """
+    Form to edit a single picklist record. Inherits from calvincTools.cSRFSingleRecordForm.
+    """
+    def __init__(self, parent=None):
+        super().__init__(model=picklist, parent=parent)
+class lstPicklist_records(cSRFRecordList):
+    """
+    Form to list picklist records. Inherits from calvincTools.cSRFRecordList.
+    """
+    _ORMmodel = picklist
+    _primary_key = get_primary_key_column(picklist)
+    _ssnmaker = get_app_sessionmaker()
+class editPicklist(cSRFMultiRecordWrapper):
+    """
+    Main form to edit picklist records, with subforms for different views.
+    Inherits from calvincTools.cSRFMultiRecordWrapper.
+    """
+    _formname = "Edit Picklists"
+
+    def defineFields(self):
+        r = [
+            cQFormFieldDef(name='AllPicklists',
+                field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
+                widget_type=lstPicklist_records,
+                label='All Picklists',
+                position=(0, 0),
+            ),
+            cQFormFieldDef(name='ActivePicklists',
+                field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
+                widget_type=lstPicklist_records,  # Ideally would be a filtered version; user may need to implement
+                label='Active Picklists',
+                position=(0, 1),
+            ),
+        ]
+        return r
+    # defineFields
+
+class editPicklist_v0(cSRFSingleRecordForm):
     #### AI generated code - may require adjustments to fit calvincTools API and form layout. Please review and modify as needed. ####
     """
     Form to edit picklist records. Inherits from calvincTools.cSRFSingleRecordForm.
