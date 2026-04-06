@@ -1,13 +1,19 @@
 from typing import Any
 
-from PySide6.QtWidgets import QPushButton, QVBoxLayout
+from PySide6.QtWidgets import (
+    QLineEdit, QDateEdit,
+    QPushButton, 
+    QVBoxLayout,
+    )
 
 from models import picklist, L6L10Parts
 from database import get_app_sessionmaker
 
 from calvincTools.utils import (
     get_primary_key_column,
+    cDataList,
     )
+from calvincTools.database import Repository
 from calvincTools.utils.forms import (
     cQFormFieldDef, cQFormBtnDef,
     cSRFSingleRecordForm,
@@ -15,6 +21,7 @@ from calvincTools.utils.forms import (
     cSRFRecordGrid, cSRFRecordList, cSRFRecordList_Record,
 )
 
+partnum_choices = {r.PartNumber: str(r.PartNumber) for r in Repository(get_app_sessionmaker(), L6L10Parts).get_all()}
 
 class picklist_record(cSRFRecordList_Record):
     """
@@ -22,6 +29,78 @@ class picklist_record(cSRFRecordList_Record):
     """
     def __init__(self, parent=None):
         super().__init__(model=picklist, parent=parent)
+    
+    def defineFields(self):
+        r = [
+            cQFormFieldDef(name='status',
+                label='Status',
+                widget_type=QLineEdit,
+                position=(0, 0),
+            ),
+            cQFormFieldDef(name='priority',
+                label='Part Number',
+                widget_type=QLineEdit,
+                position=(0, 0),
+            ),
+            cQFormFieldDef(name='PartNumber',
+                label='Part Number',
+                widget_type=cDataList,
+                choices=partnum_choices,
+                position=(0, 0),
+            ),
+            cQFormFieldDef(name='PKNumber',
+                label='PK Number',
+                widget_type=QLineEdit,
+                position=(0, 1),
+            ),
+            cQFormFieldDef(name='Requestor',
+                label='Requestor',
+                widget_type=QLineEdit,
+                position=(0, 1),
+            ),
+            cQFormFieldDef(name='WONumber',
+                label='WO Number',
+                widget_type=QLineEdit,
+                position=(0, 2),
+            ),
+            cQFormFieldDef(name='intQty',
+                label='Initial Qty',
+                widget_type=QLineEdit,
+                position=(1, 0),
+            ),
+            cQFormFieldDef(name='remainQty',
+                label='Remain Qty',
+                widget_type=QLineEdit,
+                position=(1, 1),
+            ),
+            cQFormFieldDef(name='status',
+                label='Status',
+                widget_type=QLineEdit,
+                position=(1, 2),
+            ),
+            cQFormFieldDef(name='salesOrder',
+                label='Sales Order',
+                widget_type=QLineEdit,
+                position=(1, 3),
+            ),
+            cQFormFieldDef(name='owner',
+                label='Owner',
+                widget_type=QLineEdit,
+                position=(2, 0),
+            ),
+            cQFormFieldDef(name='finishDate',
+                label='Finish Date',
+                widget_type=QDateEdit,
+                position=(2, 1),
+            ),
+            cQFormFieldDef(name='notes',
+                label='Notes',
+                widget_type=QLineEdit,
+                position=(2, 2),
+            ),
+        ]
+        return r
+
 class lstPicklist_records(cSRFRecordList):
     """
     Form to list picklist records. Inherits from calvincTools.cSRFRecordList.
