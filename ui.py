@@ -15,6 +15,7 @@ from calvincTools.utils import (
     )
 from calvincTools.database import Repository
 from calvincTools.utils.forms import (
+    cQFmConstants,
     cQFormFieldDef, cQFormBtnDef,
     cSRFSingleRecordForm,
     cSRFMultiRecordWrapper,
@@ -40,63 +41,58 @@ class picklist_record(cSRFRecordList_Record):
             cQFormFieldDef(name='priority',
                 label='Part Number',
                 widget_type=QLineEdit,
-                position=(0, 0),
+                position=(0, 1),
             ),
             cQFormFieldDef(name='PartNumber',
                 label='Part Number',
                 widget_type=cDataList,
                 choices=partnum_choices,
-                position=(0, 0),
+                position=(0, 2, 1,  2),
             ),
             cQFormFieldDef(name='PKNumber',
                 label='PK Number',
                 widget_type=QLineEdit,
-                position=(0, 1),
+                position=(1, 0),
             ),
             cQFormFieldDef(name='Requestor',
                 label='Requestor',
                 widget_type=QLineEdit,
-                position=(0, 1),
+                position=(1, 1, 1, 2),
             ),
             cQFormFieldDef(name='WONumber',
                 label='WO Number',
                 widget_type=QLineEdit,
-                position=(0, 2),
+                position=(1, 3),
             ),
             cQFormFieldDef(name='intQty',
                 label='Initial Qty',
                 widget_type=QLineEdit,
-                position=(1, 0),
+                position=(1, 5),
             ),
             cQFormFieldDef(name='remainQty',
                 label='Remain Qty',
                 widget_type=QLineEdit,
-                position=(1, 1),
-            ),
-            cQFormFieldDef(name='status',
-                label='Status',
-                widget_type=QLineEdit,
-                position=(1, 2),
+                position=(1, 6),
             ),
             cQFormFieldDef(name='salesOrder',
                 label='Sales Order',
                 widget_type=QLineEdit,
-                position=(1, 3),
+                position=(0, 4),
             ),
             cQFormFieldDef(name='owner',
                 label='Owner',
                 widget_type=QLineEdit,
-                position=(2, 0),
+                position=(0, 5),
             ),
             cQFormFieldDef(name='finishDate',
                 label='Finish Date',
                 widget_type=QDateEdit,
-                position=(2, 1),
+                position=(0, 6),
             ),
             cQFormFieldDef(name='notes',
                 label='Notes',
                 widget_type=QLineEdit,
-                position=(2, 2),
+                position=(2, 1, 1, 6),
             ),
         ]
         return r
@@ -108,6 +104,11 @@ class lstPicklist_records(cSRFRecordList):
     _ORMmodel = picklist
     _primary_key = get_primary_key_column(picklist)
     _ssnmaker = get_app_sessionmaker()
+
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.loadRecords()   # Load all records on initialization; can be modified to load with specific conditions if desired
+
 class editPicklist(cSRFMultiRecordWrapper):
     """
     Main form to edit picklist records, with subforms for different views.
@@ -117,6 +118,13 @@ class editPicklist(cSRFMultiRecordWrapper):
 
     def defineFields(self):
         r = [
+            cQFormFieldDef(name='ToggleActive',
+                field_type=cQFormFieldDef.cQFormFieldType.INTERNAL,
+                label='Toggle Active',
+                widget_type=QPushButton,
+                page=cQFmConstants.pageFixedTop,
+                position=(0, 2),
+            ),
             cQFormFieldDef(name='AllPicklists',
                 field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
                 widget_type=lstPicklist_records,
@@ -125,13 +133,12 @@ class editPicklist(cSRFMultiRecordWrapper):
             ),
             cQFormFieldDef(name='ActivePicklists',
                 field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
-                widget_type=lstPicklist_records,  # Ideally would be a filtered version; user may need to implement
+                widget_type=lstPicklist_records,   # For simplicity, using the same form but will apply filter in code
                 label='Active Picklists',
-                position=(0, 1),
+                position=(1, 0),
             ),
         ]
         return r
-    # defineFields
 
 class editPicklist_v0(cSRFSingleRecordForm):
     #### AI generated code - may require adjustments to fit calvincTools API and form layout. Please review and modify as needed. ####
