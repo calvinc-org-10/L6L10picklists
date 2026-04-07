@@ -28,36 +28,40 @@ class picklist_record(cSRFRecordList_Record):
     """
     Form to edit a single picklist record. Inherits from calvincTools.cSRFSingleRecordForm.
     """
-    def __init__(self, record: Any, parent=None):
-        super().__init__(record=record, parent=parent)
+    _ORMmodel = picklist
+    _primary_key = get_primary_key_column(picklist)
+    _ssnmaker = get_app_sessionmaker()
+
+    # def __init__(self, record: Any, parent=None):
+    #     super().__init__(record=record, parent=parent)
     
     def defineFields(self):
         r = [
             cQFormFieldDef(name='status',
                 label='Status',
                 widget_type=QLineEdit,
-                position=(0, 0),
+                position=(0, 0, 1, 2),
             ),
             cQFormFieldDef(name='priority',
-                label='Part Number',
+                label='Priority',
                 widget_type=QLineEdit,
-                position=(0, 1),
+                position=(0, 2),
             ),
             cQFormFieldDef(name='PartNumber',
                 label='Part Number',
                 widget_type=cDataList,
                 choices=partnum_choices,
-                position=(0, 2, 1,  2),
+                position=(0, 3, 1,  2),
             ),
             cQFormFieldDef(name='PKNumber',
                 label='PK Number',
                 widget_type=QLineEdit,
-                position=(1, 0),
+                position=(1, 0, 1, 2),
             ),
             cQFormFieldDef(name='Requestor',
                 label='Requestor',
                 widget_type=QLineEdit,
-                position=(1, 1, 1, 2),
+                position=(1, 2, 1, 2),
             ),
             cQFormFieldDef(name='WONumber',
                 label='WO Number',
@@ -107,10 +111,6 @@ class lstPicklist_records(cSRFRecordList):
     _recordClass = picklist_record
     _page_spacing = 2
     
-    def __init__(self, parent=None):
-        super().__init__(parent=parent)
-        self.loadRecords()   # Load all records on initialization; can be modified to load with specific conditions if desired
-
     def defineFields(self):
         return []
     
@@ -130,17 +130,11 @@ class editPicklist(cSRFMultiRecordWrapper):
                 page=cQFmConstants.pageFixedTop,
                 position=(0, 2),
             ),
-            cQFormFieldDef(name='AllPicklists',
+            cQFormFieldDef(name='Picklists',
                 field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
                 widget_type=lstPicklist_records,
                 label='All Picklists',
-                position=(0, 0),
-            ),
-            cQFormFieldDef(name='ActivePicklists',
-                field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
-                widget_type=lstPicklist_records,   # For simplicity, using the same form but will apply filter in code
-                label='Active Picklists',
-                position=(1, 0),
+                position=(0, 0, 4, 1),
             ),
         ]
         return r
