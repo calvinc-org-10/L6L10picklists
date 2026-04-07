@@ -28,8 +28,8 @@ class picklist_record(cSRFRecordList_Record):
     """
     Form to edit a single picklist record. Inherits from calvincTools.cSRFSingleRecordForm.
     """
-    def __init__(self, parent=None):
-        super().__init__(model=picklist, parent=parent)
+    def __init__(self, record: Any, parent=None):
+        super().__init__(record=record, parent=parent)
     
     def defineFields(self):
         r = [
@@ -86,7 +86,7 @@ class picklist_record(cSRFRecordList_Record):
             ),
             cQFormFieldDef(name='finishDate',
                 label='Finish Date',
-                widget_type=QDateEdit,
+                widget_type=QLineEdit,
                 position=(0, 6),
             ),
             cQFormFieldDef(name='notes',
@@ -104,11 +104,16 @@ class lstPicklist_records(cSRFRecordList):
     _ORMmodel = picklist
     _primary_key = get_primary_key_column(picklist)
     _ssnmaker = get_app_sessionmaker()
-
+    _recordClass = picklist_record
+    _page_spacing = 2
+    
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.loadRecords()   # Load all records on initialization; can be modified to load with specific conditions if desired
 
+    def defineFields(self):
+        return []
+    
 class editPicklist(cSRFMultiRecordWrapper):
     """
     Main form to edit picklist records, with subforms for different views.
