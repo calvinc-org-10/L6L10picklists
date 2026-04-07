@@ -90,7 +90,7 @@ class picklist_record(cSRFRecordList_Record):
             ),
             cQFormFieldDef(name='finishDate',
                 label='Finish Date',
-                widget_type=QLineEdit,
+                widget_type=QDateEdit,
                 position=(0, 6),
             ),
             cQFormFieldDef(name='notes',

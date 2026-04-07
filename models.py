@@ -40,7 +40,7 @@ class picklist(pickModelBase):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     status: Mapped[str] = mapped_column(String, default='')
-    finishDate: Mapped[str] = mapped_column(String, nullable=True)
+    finishDate: Mapped[date] = mapped_column(Date, nullable=True)
     priority: Mapped[str] = mapped_column(String, default='')
     PartNumber: Mapped[str] = mapped_column(String, nullable=False)
     PKNumber: Mapped[str] = mapped_column(String, nullable=False)
