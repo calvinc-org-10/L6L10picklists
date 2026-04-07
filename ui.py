@@ -139,6 +139,34 @@ class editPicklist(cSRFMultiRecordWrapper):
         ]
         return r
 
+class editPicklistGridSub(cSRFRecordGrid):
+    """
+    Form to edit picklist records. 
+    """
+    _ORMmodel = picklist
+    _primary_key = get_primary_key_column(picklist)
+    _ssnmaker = get_app_sessionmaker()
+# editPicklistGridSub
+class editPicklistGridMain(cSRFMultiRecordWrapper):
+    """
+    Main form to edit picklist records, with subforms for different views.
+    Inherits from calvincTools.cSRFMultiRecordWrapper.
+    """
+    _formname = "Picklists"
+
+    def defineFields(self):
+        r = [
+            cQFormFieldDef(name='picklists',
+                field_type=cQFormFieldDef.cQFormFieldType.SUBFORM,
+                widget_type=editPicklistGridSub,
+                label='Picklists',
+                position=(0, 0),
+            ),
+        ]
+        return r
+    # defineFields
+# editL6L10PartsMain
+
 class editPicklist_v0(cSRFSingleRecordForm):
     #### AI generated code - may require adjustments to fit calvincTools API and form layout. Please review and modify as needed. ####
     """

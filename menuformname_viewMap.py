@@ -1,7 +1,7 @@
 # import _newcode
 # import app.forms as forms
 # from userprofiles.views import fnWICSuserForm
-from ui import editPicklist, editL6L10PartsMain
+from ui import editPicklist, editPicklistGridMain, editL6L10PartsMain
 
 
 
@@ -47,6 +47,7 @@ FormNameToURL_Map['frmRandCountScheduler'.lower()] = (None, None)
 # FormNameToURL_Map['tblActualCounts'.lower()] = ('ActualCountList', None)
 FormNameToURL_Map['L6L10Parts'.lower()] = (None, editL6L10PartsMain)
 FormNameToURL_Map['picklists'.lower()] = (None, editPicklist)
+FormNameToURL_Map['picklistsgrid'.lower()] = (None, editPicklist)
 
 
 # FormNameToURL_Map['test01'.lower()] = ('', _newcode.UploadSAPSOHSprsht)
