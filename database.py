@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base
+from models import pickModelBase
 
 rootdir = "."
 app_dbName = f"{rootdir}/l6l10picklists.db"
@@ -12,7 +12,7 @@ engine = create_engine(
     )
 
 # Create all tables in the database
-Base.metadata.create_all(engine)
+pickModelBase.metadata.create_all(engine)
 
 # Create a customized Session class
 Session = sessionmaker(bind=engine)
