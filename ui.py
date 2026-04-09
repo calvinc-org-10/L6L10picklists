@@ -144,6 +144,22 @@ class editPicklistGridSub(cSRFRecordGrid):
     Form to edit picklist records. 
     """
     _ORMmodel = picklist
+    _columns = [
+        'PartNumber', 
+        'PKNumber', 
+        'WONumber', 
+        'status', 
+        'priority', 
+        'Requestor', 
+        'intQty', 
+        'remainQty', 
+        'owner', 
+        'finishDate'
+        ]
+    _orderby = [
+        picklist.PartNumber, 
+        picklist.PKNumber,
+        ]
     _primary_key = get_primary_key_column(picklist)
     _ssnmaker = get_app_sessionmaker()
 # editPicklistGridSub
