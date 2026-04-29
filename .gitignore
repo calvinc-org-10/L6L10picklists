@@ -3,6 +3,7 @@ app_secrets.py
 app_secrets/
 templates/SQLhints.html
 templates/appNews.html
+cMenudb.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
