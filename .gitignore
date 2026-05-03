@@ -4,6 +4,7 @@ app_secrets/
 templates/SQLhints.html
 templates/appNews.html
 cMenudb.sqlite
+l6l10picklists.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -142,3 +143,4 @@ dmypy.json
 .DS_Store
 files*.zip
 devnotes.txt
+cMenudb.sqlite

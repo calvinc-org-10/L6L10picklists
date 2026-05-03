@@ -6,10 +6,10 @@ from PySide6.QtWidgets import QApplication
 
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, )
 
+from app_secrets import (usr_auth, )
 
 from sysver import (_appname, sysver, )
-from calvincTools.apphooks import cTools_apphooks
-from calvincTools.cMenu import cMenu
+from calvincTools import calvincTools
 
 from menuformname_viewMap import FormNameToURL_Map
 from externalWebPageURL_Map import ExternalWebPageURL_Map
@@ -21,24 +21,24 @@ class MainScreen(QWidget):
         if not self.objectName():
             self.setObjectName("MainWindow")
         
-        cTools_apphooks.initialize(
+        cTools = calvincTools(
             appname=_appname,
-            sysver=sysver['DEV'],
+            appver=sysver['DEV'],
             FormNameToURL_Map=FormNameToURL_Map,
             ExternalWebPageURL_Map=ExternalWebPageURL_Map,
             app_sessionmaker=get_app_sessionmaker(),
+            usr_auth=usr_auth,
         )
         
-        theMenu = cMenu(parent)
-        # theMenu.loadMenu(3, 5) #FIX cMenu!!
         llayout = QVBoxLayout(self)
-        llayout.addWidget(theMenu)
-        
+        stack = cTools.main_window_stack()
+        if stack is not None:
+            llayout.addWidget(stack)
         self.setLayout(llayout)
         
         self.setWindowTitle(self.tr(_appname + " " + sysver['DEV']))
 
-        # QMetaObject.connectSlotsByName(self)
+        cTools.login()
     # __init__
 # MainScreen
 
@@ -49,5 +49,4 @@ if __name__ == "__main__":
     topscreen.show()
 
     sys.exit(app.exec())
-    
-    
+
