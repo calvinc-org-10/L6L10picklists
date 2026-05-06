@@ -4,6 +4,7 @@ app_secrets/
 templates/SQLhints.html
 templates/appNews.html
 cMenudb.sqlite
+appdb.sqlite
 l6l10picklists.db
 
 # Byte-compiled / optimized / DLL files
