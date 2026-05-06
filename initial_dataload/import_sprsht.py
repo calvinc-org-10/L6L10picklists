@@ -5,13 +5,14 @@ from PySide6.QtWidgets import (QWidget,
     QPushButton, QLabel, QProgressBar, 
     )
 
+from calvincTools.mathexpr_parser import evaluate
 from calvincTools.utils import (cExcelFile, str2,)
 
 from database import (get_app_sessionmaker, Repository, )
 from models import picklist
 
 
-class test_spr_import(QWidget):
+class init_picklist_import(QWidget):
     tstFile = "D:/tmp0/schedule - Calvin.xlsx"
     sheet = "archive"
     ORMModel = picklist
@@ -67,13 +68,30 @@ class test_spr_import(QWidget):
             "PK/RP/RF": SSFD("PKNumber"), 
             "WO/MR": SSFD("WONumber", AllowedTypes=(str, type(None)), CleanProc=self.none_to_str,), 
             "REQUESTOR": SSFD("Requestor", AllowedTypes=(str, type(None))), 
-            "init qty": SSFD("intQty", AllowedTypes=(int, )), 
+            "init qty": SSFD("intQty", AllowedTypes=(int, ), CleanProc=self.evalqty), 
             "remain qty": SSFD("remainQty", AllowedTypes=(int, type(None))), 
             "Sales Order #": SSFD("salesOrder"), 
             "Owner": SSFD("owner"), 
             "NOTES": SSFD("notes"),
             }
     
+    def evalqty(self, val) -> tuple[bool, int]:
+        if isinstance(val, int):
+            return (True, val)
+        elif isinstance(val, str):
+            if val[0] == "=":
+                val = val[1:]  # Remove leading '=' if present
+            try:
+                evaluated_val = evaluate(val)
+                if isinstance(evaluated_val, int):
+                    return (True, evaluated_val)
+                else:
+                    return (False, 0)  # Evaluation did not result in an integer
+            except Exception:
+                return (False, 0)  # Evaluation failed
+        else:
+            return (False, 0)  # Unsupported type for quantity
+        
     def none_to_str(self, val) -> tuple[bool, str]:
         return (True, str2(val))
     
